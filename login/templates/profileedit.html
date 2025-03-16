@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JewelryShop - ยินดีต้อนรับ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex justify-center items-center">
+
+    <!-- กล่องข้อมูลหลัก -->
+    <div class="w-full max-w-md bg-gradient-to-r from-purple-400 to-pink-500 shadow-md rounded-lg p-6">
+        <!-- ส่วนหัว -->
+        <div class="flex flex-col items-center mb-6">
+            <!-- รูปโปรไฟล์ -->
+            <img src="https://cdn-icons-png.flaticon.com/128/3135/3135715.png" 
+                 alt="โปรไฟล์ผู้ใช้" 
+                 class="w-24 h-24 rounded-full border-4 border-yellow-400 mb-4 shadow-lg">
+            <!-- ข้อความต้อนรับ -->
+            <h1 class="text-2xl font-semibold text-white">ยินดีต้อนรับผู้ใช้งาน</h1>
+        </div>
+
+        <!-- ปุ่มเมนู -->
+        <div class="space-y-4">
+            <!-- ปุ่ม ข้อมูลส่วนตัว -->
+            <a href="/profile" 
+               class="block w-full text-center bg-white hover:bg-gray-100 text-gray-800 font-medium py-3 rounded-lg shadow-md">
+                ข้อมูลส่วนตัว
+            </a>
+            <!-- ปุ่ม ติดตามงาน -->
+            <a href="{% url 'task_list'%}" 
+               class="block w-full text-center bg-white hover:bg-gray-100 text-gray-800 font-medium py-3 rounded-lg shadow-md">
+                ติดตามงาน
+            </a>
+            <!-- ปุ่ม ติดต่อสอบถาม -->
+            <a href="{% url 'chat' user_id=request.user.id %}"
+                class="block w-full text-center bg-white hover:bg-gray-100 text-gray-800 font-medium py-3 rounded-lg shadow-md">
+                ติดต่อสอบถาม
+            </a>
+
+            <!-- ปุ่มย้อนกลับ -->
+        <div class="mt-6">
+            <a href="javascript:history.back()" 
+               class="block w-full text-center bg-white hover:bg-gray-100 text-gray-800 font-medium py-3 rounded-lg shadow-md">
+                ย้อนกลับ
+            </a>
+        </div>
+            <!-- ปุ่ม ออกจากระบบ -->
+            <a href="/logout" 
+               class="block w-full text-center bg-red-500 hover:bg-red-600 text-white font-medium py-3 rounded-lg shadow-md">
+                ออกจากระบบ
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

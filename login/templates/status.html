@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>อัปเดตสถานะคำสั่งทำจิวเวลรี่</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen flex items-center justify-center">
+  
+  <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">🔄 อัปเดตสถานะคำสั่งทำจิวเวลรี่</h1>
+
+    <p class="text-lg font-medium text-center mb-4">คำสั่งซื้อของ {{ order.user.username }}</p>
+
+    <!-- ✅ Form สำหรับอัปเดตสถานะ -->
+    <form method="POST" action="{% url 'status' %}">
+      {% csrf_token %}
+      <ul class="divide-y divide-gray-300">
+        {% for step, label in order.STATUS_CHOICES %}
+        <li class="flex items-center justify-between py-3">
+          <span class="font-medium text-gray-700">{{ label }}</span>
+          <input type="radio" name="status" value="{{ step }}" class="h-6 w-6 text-green-500" 
+                 {% if order.status == step %}checked{% endif %} />
+        </li>
+        {% endfor %}
+      </ul>
+
+      <!-- ✅ ปุ่มอัปเดตสถานะ -->
+      <div class="mt-8 text-center">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md">
+          ✅ บันทึกสถานะ
+        </button>
+      </div>
+    </form>
+
+    <!-- ✅ ปุ่มย้อนกลับ -->
+    <div class="mt-6 flex justify-center">
+      <a href="{% url 'admin_dashboard' %}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md">
+        ⬅️ ย้อนกลับ
+      </a>
+    </div>
+  </div>
+</body>
+</html>

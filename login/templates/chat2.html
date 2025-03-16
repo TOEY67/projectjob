@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <h2>แชทกับ {{ receiver.username }}</h2>
+    <div id="chat-log" class="h-64 overflow-y-scroll border p-2"></div>
+    
+    <input id="chat-message-input" type="text" placeholder="พิมพ์ข้อความ..." class="border p-2 w-full">
+    <button id="chat-message-submit" class="bg-blue-500 text-white px-4 py-2 mt-2">ส่ง</button>
+    
+    <script>
+        const receiverId = "{{ receiver.id }}";
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + receiverId + '/'
+        );
+    
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.getElementById('chat-log').innerHTML += '<p>' + data.sender + ': ' + data.message + '</p>';
+        };
+    
+        document.getElementById('chat-message-submit').onclick = function() {
+            const message = document.getElementById('chat-message-input').value;
+            chatSocket.send(JSON.stringify({'message': message, 'sender': '{{ request.user.username }}'}));
+            document.getElementById('chat-message-input').value = '';
+        };
+    </script>
+<body>
+    <h2>Chat with {{ receiver.username }}</h2>
+    
+    <div id="chat_box">
+        {% for message in messages %}
+            <div>
+                <b>{{ message.sender.username }}:</b> {{ message.content }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <form onsubmit="sendMessage(event)">
+        <input type="text" id="message_input" placeholder="Type a message">
+        <button type="submit">Send</button>
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JewelryShop - Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex justify-center items-center">
+    <div class="w-full max-w-4xl bg-gradient-to-r from-purple-400 to-pink-500 p-8 rounded-lg shadow-md">
+        <!-- Header -->
+        <div class="flex flex-col items-center mb-6">
+            <!-- Profile Picture -->
+            <div class="relative">
+                <img id="profileImage" src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" 
+                     class="w-32 h-32 object-cover rounded-full border-4 border-white shadow-lg">
+                <!-- Hidden File Input -->
+                <input type="file" id="profile_picture" name="profile_picture" class="hidden" onchange="showImage(event)">
+                <!-- Upload Button -->
+                <label for="profile_picture" 
+                       class="absolute bottom-2 right-2 bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-full text-sm cursor-pointer">
+                    เปลี่ยนรูป
+                </label>
+            </div>
+            <!-- แสดงชื่อแบบเรียลไทม์ -->
+            <h1 class="text-2xl font-semibold text-white mt-4">
+                <span id="displayName">{{ user.userprofile.name|default:"-" }}</span>
+            </h1>
+        </div>
+
+        <!-- Profile Info Form -->
+        <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="bg-white p-8 rounded-lg space-y-6">
+                <!-- ชื่อ -->
+                <div class="flex justify-between">
+                    <label for="name" class="font-medium">ชื่อ :</label>
+                    <input type="text" id="name" name="name" class="bg-gray-200 w-2/3 h-10 px-4 rounded-lg" 
+                           placeholder="กรอกชื่อของคุณ" value="{{ user.userprofile.name|default:'' }}" required>
+                </div>
+                <!-- อีเมล -->
+                <div class="flex justify-between">
+                    <label for="email" class="font-medium">อีเมล :</label>
+                    <input type="email" id="email" name="email" class="bg-gray-200 w-2/3 h-10 px-4 rounded-lg" 
+                           placeholder="กรอกอีเมลของคุณ" value="{{ user.email|default:'' }}" required>
+                </div>
+                <!-- ที่อยู่ -->
+                <div class="flex justify-between">
+                    <label for="address" class="font-medium">ที่อยู่ :</label>
+                    <input type="text" id="address" name="address" class="bg-gray-200 w-2/3 h-10 px-4 rounded-lg" 
+                           placeholder="กรอกที่อยู่ของคุณ" value="{{ user.userprofile.address|default:'' }}" required>
+                </div>
+                <!-- วัน/เดือน/ปี -->
+                <div class="flex justify-between">
+                    <label for="dob" class="font-medium">วัน/เดือน/ปี :</label>
+                    <input type="date" id="dob" name="dob" class="bg-gray-200 w-2/3 h-10 px-4 rounded-lg"
+                    value="{{ user.userprofile.dob|date:'Y-m-d'|default:'' }}" required>
+                </div>
+                <!-- เบอร์โทร -->
+                <div class="flex justify-between">
+                    <label for="phone" class="font-medium">เบอร์โทร :</label>
+                    <input type="tel" id="phone" name="phone" class="bg-gray-200 w-2/3 h-10 px-4 rounded-lg" 
+                           placeholder="กรอกเบอร์โทรของคุณ" value="{{ user.userprofile.phone|default:'' }}" required>
+                </div>
+            </div>
+            <!-- ปุ่ม -->
+            <div class="flex justify-between mt-8">
+                <a href="{% url 'home' %}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded">
+                    ย้อนกลับ
+                </a>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                    ยืนยัน
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- JavaScript สำหรับแสดงตัวอย่างรูปและอัปเดตชื่อแบบเรียลไทม์ -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const nameInput = document.getElementById("name");
+            const displayName = document.getElementById("displayName");
+            const profileImage = document.getElementById("profileImage");
+            const fileInput = document.getElementById("profile_picture");
+    
+            // ตรวจสอบว่ามี nameInput และ displayName หรือไม่
+            if (nameInput && displayName) {
+                // อัปเดตชื่อที่โหลดมาจาก Django ทันทีที่หน้าโหลด
+                displayName.textContent = nameInput.value.trim() || "ข้อมูลส่วนตัว";
+    
+                // อัปเดตชื่อแบบเรียลไทม์เมื่อพิมพ์
+                nameInput.addEventListener("input", function() {
+                    displayName.textContent = this.value.trim() || "ข้อมูลส่วนตัว";
+                });
+            }
+    
+            // ฟังก์ชันเปลี่ยนรูปเมื่ออัปโหลด
+            function showImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        if (profileImage) {
+                            profileImage.src = e.target.result;
+                        }
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+    
+            // ตรวจสอบว่ามี fileInput หรือไม่ แล้วเพิ่ม event listener
+            if (fileInput) {
+                fileInput.addEventListener("change", showImage);
+            }
+        });
+    </script>
+</body>
+</html>

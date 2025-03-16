@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Register - MyWebsite{% endblock %}
+
+{% block content %}
+<main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+        คำอธิบายเกี่ยวกับเรา
+    </h2>
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform p-6">
+        <div class="flex flex-col md:flex-row items-start space-x-6">
+            <!-- รูปภาพ -->
+            <img src="{% static 'jewelly.png' %}" class="w-full md:w-1/2 rounded-lg shadow-lg">
+            
+            <!-- คำอธิบาย -->
+            <div class="md:w-1/2 flex flex-col">
+                <h2 class="text-3xl font-extrabold text-gray-900 tracking-wide">
+                    💎 JewelryShop 💎
+                </h2>
+                <p class="text-lg text-gray-700 mt-4 leading-relaxed">
+                    เราเชื่อว่าการเจียระไนที่ดี ไม่ใช่แค่การทำให้พลอยมีประกายสวยงาม แต่ต้องคำนึงถึงลักษณะทางธรรมชาติของพลอยแต่ละเม็ด ไม่ว่าจะเป็นความแข็ง สี ความใส หรือมลทินภายใน เราใช้เทคนิคการเจียระไนแบบดั้งเดิม ผสมผสานกับเทคนิคสมัยใหม่ เพื่อให้ได้ชิ้นงานที่งดงามที่สุด 
+                </p>
+                <!-- ปุ่มสั่งทำ -->
+                <div class="mt-6">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'book_appointment' %}" 
+                           class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 text-center block">
+                            สั่งทำ
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}?next={% url 'book_appointment' %}" 
+                           class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 text-center block">
+                            สั่งทำ
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+            {% for gem in gems %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl">
+                <img src="{{ gem.image_url }}" alt="{{ gem.name }}" class="w-full h-64 lg:h-72 object-cover">
+                <div class="p-6">
+                    <p class="text-gray-600 text-sm mt-2">{{ gem.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}

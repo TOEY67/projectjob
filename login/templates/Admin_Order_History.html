@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ประวัติสั่งทำย้อนหลัง</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container mx-auto p-6">
+        <!-- Header Section -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">ประวัติสั่งทำย้อนหลัง</h1>
+            <!-- ปุ่มย้อนกลับ -->
+            <a href="{% url 'admin_dashboard' %}" class="flex items-center bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+                 ย้อนกลับ
+            </a>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="overflow-x-auto bg-white rounded-lg shadow-lg">
+            <table class="min-w-full border border-gray-200 rounded-lg">
+                <thead>
+                    <tr class="bg-indigo-600 text-white text-left uppercase text-sm font-medium">
+                        <th class="py-3 px-4 border-b">ชื่อผู้ใช้</th>
+                        <th class="py-3 px-4 border-b">รายละเอียดคำสั่งซื้อ</th>
+                        <th class="py-3 px-4 border-b">จำนวน</th>
+                        <th class="py-3 px-4 border-b">รูปภาพ</th>
+                        <th class="py-3 px-4 border-b">วันที่สั่งทำ</th>
+                        <th class="py-3 px-4 border-b">สินค้า</th>
+                        <th class="py-3 px-4 border-b">ราคา</th>
+                        <th class="py-3 px-4 border-b">การจัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr class="hover:bg-gray-50">
+                        <!-- แสดงชื่อผู้ใช้ -->
+                        <td class="py-3 px-4 border-b text-center">{{ order.user.username }}</td>
+                        <td class="py-3 px-4 border-b">{{ order.details }}</td>
+                        <td class="py-3 px-4 border-b text-center">{{ order.quantity }}</td>
+                        <td class="py-3 px-4 border-b text-center">
+                            {% if order.image %}
+                                <img src="{{ order.image.url }}" alt="Order Image" class="w-16 h-16 object-cover rounded-lg mx-auto shadow">
+                            {% else %}
+                                <span class="text-gray-400">ไม่มีรูป</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-4 border-b text-center">{{ order.created_at|date:"d/m/Y" }}</td>
+                        <td class="py-3 px-4 border-b text-center">
+                            {% if order.product %}
+                                {{ order.product.name }}
+                            {% else %}
+                                <span class="text-gray-400">ไม่มีข้อมูลสินค้า</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-4 border-b text-center">
+                            {% if order.product %}
+                                {{ order.product.price }} ฿
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-4 border-b text-center">
+                            <a href="{% url 'delete_order' order.id %}" class="text-red-500 hover:underline hover:text-red-700">
+                                🗑️ ลบ
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-gray-500">ไม่มีข้อมูลคำสั่งทำ</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+

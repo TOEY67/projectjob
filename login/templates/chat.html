@@ -1,0 +1,35 @@
+<script src="https://cdn.tailwindcss.com"></script>
+{% extends "base.html" %}
+
+{% block title %}💬 แชทกับ {{ other_user.username }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-center text-green-700 mb-6">💬 แชทกับ {{ other_user.username }}</h1>
+
+<div class="chat-box space-y-4 mb-6 px-4">
+    {% for message in messages %}
+        <div class="flex flex-col {% if message.sender == request.user %}items-end{% else %}items-start{% endif %}">
+            <div class="bg-gray-100 p-4 rounded-lg max-w-xs {% if message.sender == request.user %}bg-blue-100{% else %}bg-gray-200{% endif %}">
+                <p class="font-semibold text-gray-800">{{ message.sender.username }}:</p>
+                <p class="text-gray-700">{{ message.message }}</p>
+                <small class="text-xs text-gray-500">{{ message.timestamp }}</small>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- ฟอร์มส่งข้อความ -->
+<form method="POST" class="flex items-center space-x-4 px-4">
+    {% csrf_token %}
+    <input type="text" name="message" placeholder="พิมพ์ข้อความ..." required class="w-full py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg transition">📩 ส่ง</button>
+</form>
+
+<div class="mt-6 flex justify-center space-x-4">
+    <!-- ปุ่มย้อนกลับไปหน้าก่อนหน้า -->
+    <button onclick="window.history.back()"
+            class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-lg transition">
+         ย้อนกลับ
+    </button>
+</div>
+{% endblock %}
