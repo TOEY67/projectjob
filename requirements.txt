@@ -1,0 +1,5 @@
+Django==5.1.7
+python-dotenv
+git+https://github.com/jazzband/django-widget-tweaks.git
+mysqlclient
+Pillow
